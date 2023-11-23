@@ -1,18 +1,25 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class Album {
-    // private String name;
-    // private String artist;
+public class Album extends Music{
     private ArrayList<Song> songs;
+    private double duration;
 
-    public Album(String name, String artist) {
-        // this.name = name;
-        // this.artist = artist;
+    public Album(String title, String artist, int releaseDate) {
+        super(title, artist, releaseDate);
         this.songs = new ArrayList<Song>();
     }
-    public Album() {
+    public Album(String title, String artist) {
+        super(title, artist);
+        this.songs = new ArrayList<Song>();
+    }
 
+    public double getDuration() {
+        duration = 0;
+        for (Song i: songs) {
+            duration += i.getDuration();
+        }
+        return Math.round((duration * 10.0) / 10.0);
     }
 
     public Song findSong(String title) {
@@ -24,13 +31,22 @@ public class Album {
         return null;
     }
 
-    public boolean addSong(String title, double duration) {
-        if(findSong(title) == null) {
-            songs.add(new Song(title, duration));
-            // System.out.println(title + " successfully added to the list");
+    public Song findSong(Song newSong) {
+        for (Song i: songs) {
+            if (i.getTitle().equals(newSong.getTitle())) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public boolean addSong(Song newSong) {
+        if (findSong(newSong) == null) {
+            songs.add(new Song(newSong.getTitle(), newSong.getDuration(), newSong.getAlbum()));
+            newSong.setArtist(this.getArtist());
             return true;
         } else {
-            System.out.println("Song with name " + title + " already exists in the list");
+            System.out.println("Song with name " + newSong.getTitle() + " already exists in the list");
             return false;
         }
     }
@@ -45,9 +61,9 @@ public class Album {
         return false;
     }
 
-    public boolean addToPlayList(String title, LinkedList<Song> PlayList) {
+    public boolean addToPlayList(Song song, LinkedList<Song> PlayList) {
         for(Song checkedSong : this.songs) {
-            if (checkedSong.getTitle().equals(title)) {
+            if (checkedSong.getTitle().equals(song.getTitle())) {
                 PlayList.add(checkedSong);
                 return true;
             }
