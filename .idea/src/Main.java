@@ -152,8 +152,11 @@ public class Main {
                         if (listIterator.hasPrevious()) {
                             listIterator.previous();
                             System.out.println("Now playing: " + listIterator.previous().toString());
+                            listIterator.next();
                         }
-                        forward = false;
+                        if (!listIterator.hasPrevious()) {
+                            forward = false;
+                        }
                     }
                     else {
                         System.out.println("Can't skip, this is the first song");
@@ -213,7 +216,6 @@ public class Main {
                         currentSong = listIterator.next();
                     } else if (listIterator.hasNext()) {
                         Song currentSong = listIterator.next();
-
                         Album album = currentSong.getAlbum();
                         if (album != null) {
                             System.out.println(currentSong.getTitle() + " is from the album `" +
